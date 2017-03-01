@@ -27,10 +27,10 @@ function draw() {
 	bPos.x += bDir.x*6;
 	bPos.y += bDir.y*4;
 	
-	if(bPos.x<(WIDTH/2) && bDir.x<0) {
-		if(bPos.y>pPos1.y) pPos1.y += 2;
-		if(bPos.y<pPos1.y) pPos1.y -= 2;
-		}
+	// if(bPos.x<(WIDTH/2) && bDir.x<0) {
+	// 	if(bPos.y>pPos1.y) pPos1.y += 2;
+	// 	if(bPos.y<pPos1.y) pPos1.y -= 2;
+	// 	}
 	if(bPos.x>(WIDTH/2) && bDir.x>0) {
 		if(bPos.y>pPos2.y) pPos2.y += 3;
 		if(bPos.y<pPos2.y) pPos2.y -= 3;

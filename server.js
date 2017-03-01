@@ -27,11 +27,38 @@ router.use(express.static(path.resolve(__dirname, '')));
 var sockets = {};
 
 var clientsConnected = {};
-var gamesRunning = {};
+var gamesRunning = {player:[]};
 
 io.on('connection', function (socket) {
     sockets[socket.id] = socket;
     socket.emit('connect',socket.id);
+
+    socket.on('iamaserver',function(mydata) {
+      console.dir(mydata);
+      // gamesRunning = mydata;
+      gamesRunning.serverID = socket.id;
+    });
+
+    socket.on('iamaclient',function(mydata){
+      console.dir(gamesRunning);
+      gamesRunning.player.push(socket.id);
+      socket.emit('welcomPlayer',{player:gamesRunning.player.length+1});
+    });
+
+    socket.on('joystick',function(doMove){
+      if(doMove.move==='up') {
+        sockets[gamesRunning.serverID].emit('doMove','up')
+      } else if(doMove.move==='down') {
+        sockets[gamesRunning.serverID].emit('doMove','down')
+      }
+    });
+
+
+    socket.on('disconnect', function () {
+      gamesRunning.player.splice(gamesRunning.player.indexOf(socket.id),1);
+      delete sockets[socket.id];
+    });
+
 
     socket.on('startServer',function(newServer){
       var toRun = {
@@ -94,9 +121,7 @@ io.on('connection', function (socket) {
       broadcastComrade(action.server);
     });
 
-    socket.on('disconnect', function () {
-      delete sockets[socket.id];
-    });
+
 
   });
 

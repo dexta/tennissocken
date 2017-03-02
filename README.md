@@ -1,10 +1,9 @@
 jscanvasgame
 ============
 
-<<<<<<< HEAD
+
 little game framework with javascript and canvas
 =======
-little game framework with javascript and canvas.
 
 Canvas to draw the elemets of your game, and JavaScript to do some action.
 Start with the a minimum of code, keyboard, mouse, touch and an animation loop is all we need.
@@ -38,5 +37,3 @@ function draw() {
 }
 ````
 
-Exsample code from tennis 4 two branch
->>>>>>> 21657f5... Add github pages, code exsample

@@ -46,11 +46,7 @@ io.on('connection', function (socket) {
     });
 
     socket.on('joystick',function(doMove){
-      if(doMove.move==='up') {
-        sockets[gamesRunning.serverID].emit('doMove','up')
-      } else if(doMove.move==='down') {
-        sockets[gamesRunning.serverID].emit('doMove','down')
-      }
+      sockets[gamesRunning.serverID].emit('doMove',doMove);
     });
 
 

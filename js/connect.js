@@ -6,16 +6,15 @@ socket.on('connect', function(id){
 });
 
 socket.on('doMove', function(data){
-	if(data==="down") {
+	if(data.move==="down") {
 		keyEvent({keyCode:83},'down');
-		setTimeout(function(){
-			keyEvent({keyCode:83},'up');
-		},50);
-	} else if(data==="up") {
+		keyEvent({keyCode:87},'up');
+	} else if(data.move==="up") {
+		keyEvent({keyCode:83},'up');
 		keyEvent({keyCode:87},'down');
-		setTimeout(function(){
-			keyEvent({keyCode:87},'up');
-		},50);
+	} else if(data.state==='end') {
+		keyEvent({keyCode:83},'up');
+		keyEvent({keyCode:87},'up');
 	}
   console.dir(data);
 });

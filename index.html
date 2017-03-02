@@ -60,6 +60,8 @@
 			socket.on('connect',function(){
 				socket.emit('iamaclient',{});
 			});
+
+			var joyStart = false;
 			var joystick	= new VirtualJoystick({
 				container	: document.getElementById('container'),
 				mouseSupport	: true,
@@ -67,12 +69,21 @@
 				stickRadius	: 50
 			});
 			joystick.addEventListener('touchStart', function(){
-				console.log('down')
+				console.log('down');
+				doEmit('start');
 			})
 			joystick.addEventListener('touchEnd', function(){
-				console.log('up')
+				console.log('up');
+				doEmit('end');
 			})
-
+			joystick.addEventListener('mouseStart', function(){
+				console.log('down');
+				doEmit('start');
+			})
+			joystick.addEventListener('mouseEnd', function(){
+				console.log('up');
+				doEmit('end');
+			})
 			setInterval(function(){
 				var outputEl	= document.getElementById('result');
 				outputEl.innerHTML	= '<b>Result:</b> '
@@ -82,13 +93,22 @@
 					+ (joystick.up()	? ' up'		: '')
 					+ (joystick.left()	? ' left'	: '')
 					+ (joystick.down()	? ' down' 	: '');
-				if(joystick.up()) {
-					socket.emit('joystick',{move:'up'});
-					console.log("press UP");
-				} else if (joystick.down()) {
-					socket.emit('joystick',{move:'down'});
+
+				if(joystick.up() && joyStart) {
+					socket.emit('joystick',{move:'up',state:'start'});
+				} else if (joystick.down() && joyStart) {
+					socket.emit('joystick',{move:'down',state:'start'});
 				}
 			}, 1/30 * 1000);
+
+			function doEmit(event) {
+				if(event==='start') {
+					joyStart = true;
+				} else if(event==='end') {
+					joyStart = false;
+					socket.emit('joystick',{move:'',state:'end'});
+				}
+			}
 		</script>
 	</body>
 </html>

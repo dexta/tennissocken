@@ -27,10 +27,10 @@ function draw() {
 	bPos.x += bDir.x*6;
 	bPos.y += bDir.y*4;
 	
-	// if(bPos.x<(WIDTH/2) && bDir.x<0) {
-	// 	if(bPos.y>pPos1.y) pPos1.y += 2;
-	// 	if(bPos.y<pPos1.y) pPos1.y -= 2;
-	// 	}
+	if(bPos.x<(WIDTH/2) && bDir.x<0) {
+		if(bPos.y>pPos1.y) pPos1.y += 2;
+		if(bPos.y<pPos1.y) pPos1.y -= 2;
+		}
 	if(bPos.x>(WIDTH/2) && bDir.x>0) {
 		if(bPos.y>pPos2.y) pPos2.y += 3;
 		if(bPos.y<pPos2.y) pPos2.y -= 3;
@@ -51,13 +51,40 @@ function draw() {
 	if(pPos2.y<0) pPos2.y = 0;
 	if(pPos2.y>(HEIGHT-pPos2.h)) pPos2.y = (HEIGHT-pPos2.h);
 	
-	if(bPos.x<(pPos1.x+pPos1.w) && bPos.y>pPos1.y && bPos.y<(pPos1.y+pPos1.h)) {
-		bDir.x *= -1;
-		}
-	if(bPos.x+bPos.w>pPos2.x && bPos.y>pPos2.y && bPos.y<(pPos2.y+pPos2.h)) {
-		bDir.x *= -1;
-		}
-		
+	// if(bPos.x<(pPos1.x+pPos1.w) && bPos.y>pPos1.y && bPos.y<(pPos1.y+pPos1.h)) {
+	// 	bDir.x *= -1;
+	// 	}
+	// if(bPos.x+bPos.w>pPos2.x && bPos.y>pPos2.y && bPos.y<(pPos2.y+pPos2.h)) {
+	// 	bDir.x *= -1;
+	// 	}
+
+	// shameless copy frome http://blog.mailson.org/2013/02/simple-pong-game-using-html5-and-canvas/
+if (bDir.x > 0) {
+        if (pPos2.x <= bPos.x + bPos.w &&
+                pPos2.x > bPos.x - bDir.x + bPos.w) {
+            var collisionDiff = bPos.x + bPos.w - pPos2.x;
+            var k = collisionDiff/bDir.x;
+            var y = bDir.y*k + (bPos.y - bDir.y);
+            if (y >= pPos2.y && y + bPos.h <= pPos2.y + pPos2.h) {
+                // collides with right paddle
+                bPos.x = pPos2.x - bPos.w;
+                bPos.y = Math.floor(bPos.y - bDir.y + bDir.y*k);
+                bDir.x = -bDir.x;
+            }
+        }
+    } else {
+        if (pPos1.x + pPos1.w >= bPos.x) {
+            var collisionDiff = pPos1.x + pPos1.w - bPos.x;
+            var k = collisionDiff/-bDir.x;
+            var y = bDir.y*k + (bPos.y - bDir.y);
+            if (y >= pPos1.y && y + bPos.h <= pPos1.y + pPos1.h) {
+                // collides with the left paddle
+                bPos.x = pPos1.x + pPos1.w;
+                bPos.y = Math.floor(bPos.y - bDir.y + bDir.y*k);
+                bDir.x = -bDir.x;
+            }
+        }
+    }		
 	
 	if(bPos.y<0 || (bPos.y+bPos.h)>HEIGHT) {
 		bDir.y *= -1;

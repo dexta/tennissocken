@@ -40,6 +40,7 @@ io.on('connection', function (socket) {
     });
 
     socket.on('iamaclient',function(mydata){
+      console.log("new Client conected");
       console.dir(gamesRunning);
       gamesRunning.player.push(socket.id);
       socket.emit('welcomPlayer',{player:gamesRunning.player.length+1});

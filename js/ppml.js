@@ -1,16 +1,18 @@
 var KM = {player1UP:87,player1DOWN:83,player2UP:38,player2DOWN:40};
 
 var bPos = {x:50,y:50,w:10,h:10}; 
-var pPos1 = {x:10,y:200,w:10,h:50};
-var pPos2 = {x:110,y:200,w:10,h:50};
+var pPos1 = {x:10,y:200,w:10,h:100};
+var pPos2 = {x:110,y:200,w:10,h:200};
 var bDir = {x:-1,y:1};
 var punkte = {p1:0,p2:0};
 
 function init() {
 	console.log("We are ready!");
-	bPos.x = WIDTH/2; bPos.y = HEIGHT/2;
+	bPos.x = WIDTH/2; 
+	bPos.y = HEIGHT/2;
 	pPos1.y = HEIGHT/2-pPos1.h/2;
-	pPos2.x = WIDTH-10-pPos2.w; pPos2.y = HEIGHT/2-pPos2.h/2;
+	pPos2.x = WIDTH-10-pPos2.w; 
+	pPos2.y = HEIGHT/2-pPos2.h/2;
 	
 	playSwitch();
 	
@@ -51,37 +53,31 @@ function draw() {
 	if(pPos2.y<0) pPos2.y = 0;
 	if(pPos2.y>(HEIGHT-pPos2.h)) pPos2.y = (HEIGHT-pPos2.h);
 	
-	// if(bPos.x<(pPos1.x+pPos1.w) && bPos.y>pPos1.y && bPos.y<(pPos1.y+pPos1.h)) {
-	// 	bDir.x *= -1;
-	// 	}
-	// if(bPos.x+bPos.w>pPos2.x && bPos.y>pPos2.y && bPos.y<(pPos2.y+pPos2.h)) {
-	// 	bDir.x *= -1;
-	// 	}
-
 	// shameless copy frome http://blog.mailson.org/2013/02/simple-pong-game-using-html5-and-canvas/
+	// but do some simple math separation to avoid bugs
 if (bDir.x > 0) {
-        if (pPos2.x <= bPos.x + bPos.w &&
-                pPos2.x > bPos.x - bDir.x + bPos.w) {
-            var collisionDiff = bPos.x + bPos.w - pPos2.x;
+        if (pPos2.x <= ( bPos.x + bPos.w ) && pPos2.x > ( bPos.x - (bDir.x + bPos.w) ) 
+            ) {
+            var collisionDiff = bPos.x + (bPos.w - pPos2.x);
             var k = collisionDiff/bDir.x;
             var y = bDir.y*k + (bPos.y - bDir.y);
             if (y >= pPos2.y && y + bPos.h <= pPos2.y + pPos2.h) {
                 // collides with right paddle
                 bPos.x = pPos2.x - bPos.w;
-                bPos.y = Math.floor(bPos.y - bDir.y + bDir.y*k);
-                bDir.x = -bDir.x;
+                bPos.y = Math.floor( (bPos.y - bDir.y) + (bDir.y*k) );
+                bDir.x *= -1;
             }
         }
     } else {
         if (pPos1.x + pPos1.w >= bPos.x) {
-            var collisionDiff = pPos1.x + pPos1.w - bPos.x;
+            var collisionDiff = (pPos1.x + pPos1.w) - bPos.x;
             var k = collisionDiff/-bDir.x;
             var y = bDir.y*k + (bPos.y - bDir.y);
             if (y >= pPos1.y && y + bPos.h <= pPos1.y + pPos1.h) {
                 // collides with the left paddle
                 bPos.x = pPos1.x + pPos1.w;
-                bPos.y = Math.floor(bPos.y - bDir.y + bDir.y*k);
-                bDir.x = -bDir.x;
+                bPos.y = Math.floor( (bPos.y - bDir.y) + (bDir.y*k) );
+                bDir.x *= -1;
             }
         }
     }		

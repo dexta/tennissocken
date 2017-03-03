@@ -1,4 +1,4 @@
-var socket = io('http://localhost:9423');
+var socket = io(window.location.origin);
 
 socket.on('connect', function(id){
   console.log(id);

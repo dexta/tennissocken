@@ -49,6 +49,12 @@
 			socket.on('connect',function(){
 				socket.emit('iamaclient',{});
 			});
+			socket.on('welcomePlayer',function(playerData){
+				console.dir(playerData);
+				document.body.style.background = playerData.color;
+				var svgURL = (playerData.number===1)? 'svg/PlayerOne.svg' : 'svg/PlayerTwo.svg';
+				document.getElementById('container').style.background = 'url('+svgURL+')';
+			});
 
 			var joyStart = false;
 			var joystick	= new VirtualJoystick({

@@ -16,5 +16,9 @@ socket.on('doMove', function(data){
 		keyEvent({keyCode:83},'up');
 		keyEvent({keyCode:87},'up');
 	}
-  console.dir(data);
+  // console.dir(data);
+});
+
+socket.on('newPlayer',function(newPlayer){
+  console.dir(newPlayer);
 });

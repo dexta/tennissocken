@@ -28,6 +28,8 @@ var sockets = {};
 
 var clientsConnected = {};
 var gamesRunning = {player:[]};
+var playerQueue = [];
+var playerColor = ['red','blue','green','yellow'];
 
 io.on('connection', function (socket) {
     sockets[socket.id] = socket;
@@ -35,15 +37,27 @@ io.on('connection', function (socket) {
 
     socket.on('iamaserver',function(mydata) {
       console.dir(mydata);
-      // gamesRunning = mydata;
       gamesRunning.serverID = socket.id;
     });
 
     socket.on('iamaclient',function(mydata){
-      console.log("new Client conected");
-      console.dir(gamesRunning);
-      gamesRunning.player.push(socket.id);
-      socket.emit('welcomPlayer',{player:gamesRunning.player.length+1});
+      var playerNumber = gamesRunning.player.length+1;
+      console.log("new Client conected No.: "+playerNumber);
+      var newPlayer = {};
+      newPlayer.socketID = socket.id;
+      if(playerNumber>=3) {
+        playerQueue.push(newPlayer);
+        newPlayer.queueNumber = playerQueue.length;
+        socket.emit('welcomeInPlayerQueue',newPlayer);
+      } else if( (gamesRunning.serverID||false) ) {
+        newPlayer.color = playerColor[playerNumber];
+        newPlayer.number = playerNumber;
+        gamesRunning.player.push(newPlayer);
+        socket.emit('welcomePlayer',newPlayer);
+        var serSocket = sockets[gamesRunning.serverID];
+        serSocket.emit('newPlayer',newPlayer);
+        console.dir(gamesRunning);
+      }
     });
 
     socket.on('joystick',function(doMove){

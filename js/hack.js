@@ -39,6 +39,7 @@ $(document).ready(function() {
 	$("#middle").click(function(){ 
 		//alert("main menu");
 		console.log("Main Menu");
+		playSwitch();
 		});
 	
 	});

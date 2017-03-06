@@ -132,13 +132,14 @@ function initPlayerFour(playerConfig) {
   ];
 
   canObjs.balls = [
-    new canBall(ctx,(WIDTH/2),(HEIGHT/2),10,10,-6,-4)
+    new canBall(ctx,(WIDTH/2),(HEIGHT/2),10,10,-6,-4),
+    new canBall(ctx,(WIDTH/2),(HEIGHT/2),10,10,6,4)
   ];
 
-  var cusUpd = {Y:50,collSide:'right',color:playerConfig[0].color,minMovePos:10,maxMovePos:HEIGHT-10};
-  var cusUpd1 = {Y:50,X:(WIDTH-20),collSide:'left',color:playerConfig[1].color,minMovePos:10,maxMovePos:HEIGHT-10};
-  var cusUpd2 = {X:oneThird+50,Y:10,collSide:'bottom',color:playerConfig[2].color,minMovePos:oneThird,maxMovePos:WIDTH-oneThird-90};
-  var cusUpd3 = {X:oneThird+50,Y:HEIGHT-10,collSide:'top',color:playerConfig[3].color,minMovePos:oneThird,maxMovePos:WIDTH-oneThird-90};
+  var cusUpd = {Y:50,X:300,collSide:'right',color:playerConfig[0].color,minMovePos:10,maxMovePos:HEIGHT-10};
+  var cusUpd1 = {Y:50,X:(WIDTH-300),collSide:'left',color:playerConfig[1].color,minMovePos:10,maxMovePos:HEIGHT-10};
+  var cusUpd2 = {X:oneThird+50,Y:10,collSide:'bottom',color:playerConfig[2].color,minMovePos:oneThird,maxMovePos:WIDTH-oneThird};
+  var cusUpd3 = {X:oneThird+50,Y:HEIGHT-10,collSide:'top',color:playerConfig[3].color,minMovePos:oneThird,maxMovePos:WIDTH-oneThird};
 
   canObjs.player = [
     new canPlayer(ctx,defaultConfig('xAxisPlayer',cusUpd)),

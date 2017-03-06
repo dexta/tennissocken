@@ -3,15 +3,10 @@
 //######################################################################
 
 canObj = function(ctx,X,Y) {
-  this.onClick = false;
-  this.onHover = false;
-  this.hoverFac = 1.1;
   this.X = X;
   this.Y = Y;
   this.C = ctx;
-  this.zFac = 1;
   }
-// canObj.prototype.toggleClick = function(){ this.onClick = (this.onClick) ? false : true; }
 
 canRect = function(ctx,X,Y,W,H,collSide) {
   this.constructor(ctx,X,Y);
@@ -40,28 +35,24 @@ canRect = function(ctx,X,Y,W,H,collSide) {
         var k = collisionDiff/bO.dirx;
         var y = bO.diry*k + (bO.Y - bO.diry);
         if (y >= this.Y && y + bO.height <= this.Y + this.height) {
-          // collides with right paddle
           bO.X = this.X - bO.width;
           bO.Y = Math.floor( (bO.Y - bO.diry) + (bO.diry*k) );
           bO.dirx *= -1;
           return true;
         }
       }
-      return false;
     } else if(this.collSide==="right") {
       if (this.X + this.width >= bO.X) {
         var collisionDiff = (this.X + this.width) - bO.X;
         var k = collisionDiff/-bO.dirx;
         var y = bO.diry*k + (bO.Y - bO.diry);
         if (y >= this.Y && y + bO.height <= this.Y + this.height) {
-          // collides with the left paddle
           bO.X = this.X + this.width;
           bO.Y = Math.floor( (bO.Y - bO.diry) + (bO.diry*k) );
           bO.dirx *= -1;
           return true;
         }
       }
-      return false;
     } else if(this.collSide==="top") {
       if(this.Y <= (bO.Y + bO.height) && this.Y > ( bO.Y - (bO.diry + bO.height) ) 
         ) {
@@ -75,7 +66,6 @@ canRect = function(ctx,X,Y,W,H,collSide) {
           return true;
         }
       }
-      return false;
     } else if(this.collSide==="bottom") {
       if(this.Y + this.height >= bO.Y) {
         var collisionDiff = (this.Y+this.height) - bO.Y;
@@ -88,15 +78,14 @@ canRect = function(ctx,X,Y,W,H,collSide) {
           return true;
         }
       }
-      return false;
-    }
+    } // end four way else ifs
+    return false;
   } // end collision
 } // end canRect
 
 canRect.prototype = new canObj();
 
 canPlayer = function(ctx,conf) {
-  // this.constructor(ctx,X,Y,W,H,collSide);
   for(var c in conf) {
     this[c] = conf[c];
   }
@@ -130,7 +119,6 @@ canPlayer = function(ctx,conf) {
     }
   }
 
-  // 
   this.move = function(val) {
     if(this.axis==='y') {
       this.rect.X += val;
@@ -150,9 +138,6 @@ canPlayer = function(ctx,conf) {
   }
 } // end canPlayer
 
-// canPlayer.prototype = new canRectBase();
-
-// canBall(ctx,WIDTH/2,HEIGHT/2,10,10)
 canBall = function(ctx,X,Y,W,H,dx,dy) {
   this.constructor(ctx,X,Y);
   this.width = W;

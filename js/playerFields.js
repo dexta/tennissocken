@@ -54,7 +54,7 @@ function initPlayerOne(playerConfig) {
     new canBall(ctx,(WIDTH/2),(HEIGHT/2),10,10,-6,-4)
   ];
 
-  var cusUpd = {color:playerConfig[0].color,minMovePos:10,maxMovePos:HEIGHT-10};
+  var cusUpd = {collSide:'right',color:playerConfig[0].color,minMovePos:10,maxMovePos:HEIGHT-10};
 
   canObjs.player = [
     new canPlayer(ctx,defaultConfig('xAxisPlayer',cusUpd))

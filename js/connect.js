@@ -6,17 +6,20 @@ socket.on('connect', function(id){
 });
 
 socket.on('doMove', function(data){
-	if(data.move==="down") {
-		keyEvent({keyCode:83},'down');
-		keyEvent({keyCode:87},'up');
-	} else if(data.move==="up") {
-		keyEvent({keyCode:83},'up');
-		keyEvent({keyCode:87},'down');
-	} else if(data.state==='end') {
-		keyEvent({keyCode:83},'up');
-		keyEvent({keyCode:87},'up');
+	var playerKeys = KM_P[data.player.number-1];
+	if(data.state==='end') {
+		keys[playerKeys[0]] = false;
+		keys[playerKeys[1]] = false;
+	} else if(data.state==='start') {
+		if(data.move==='up') {
+			keys[playerKeys[0]] = true;
+			keys[playerKeys[1]] = false;
+		} else if(data.move==='down') {
+			keys[playerKeys[0]] = false;
+			keys[playerKeys[1]] = true;
+		}
 	}
-  // console.dir(data);
+  console.dir(data);
 });
 
 socket.on('newPlayer',function(newPlayer){

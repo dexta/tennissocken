@@ -61,6 +61,13 @@ io.on('connection', function (socket) {
     });
 
     socket.on('joystick',function(doMove){
+      var playerData;
+      for(var g in gamesRunning.player) {
+        if(gamesRunning.player[g].socketID===socket.id) {
+          playerData = gamesRunning.player[g];
+        }
+      }
+      doMove.player = playerData;
       sockets[gamesRunning.serverID].emit('doMove',doMove);
     });
 

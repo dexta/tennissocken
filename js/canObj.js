@@ -113,21 +113,21 @@ canPlayer = function(ctx,conf) {
     if(hit) {
       bO.setColor(this.rect.fillColor,this.rect.borderColor);
       var bFac = [];
-      if(this.axis==='x') {
-        bFac[0] = (bO.X-this.rect.X)-(this.rect.height/2);
-        bFac[1] = (this.rect.height/2);
-      }  else if(this.axis==='y') {
-        bFac[0] = (bO.Y-this.rect.Y)-(this.rect.width/2);
+      if(this.axis==='y') {
+        bFac[0] = (bO.X-this.rect.X)-(this.rect.width/2);
         bFac[1] = (this.rect.width/2);
+      }  else if(this.axis==='x') {
+        bFac[0] = (bO.Y-this.rect.Y)-(this.rect.height/2);
+        bFac[1] = (this.rect.height/2);
       }
 
       bFac[0] = (bFac[0]>=0)? bFac[0] : bFac[0]*-1;
 
-      var rFac = (((bFac[0]*100)/bFac[1])/110)*(Math.random()+1);
-      
+      var rFac = 1-(((bFac[0]*100)/bFac[1])/100);
+      // *(Math.random()+1)
       console.log("ball Factor "+rFac);
-      bO.dirx = (bO.dirx>=0)? rFac*12 : (rFac*12)*-1;
-      bO.diry = (bO.diry>=0)? rFac*8 : (rFac*8)*-1;
+      // bO.dirx = (bO.dirx>=0)? rFac*12 : (rFac*12)*-1;
+      bO.diry = (bO.diry>=0)? rFac*18 : (rFac*8)*-1;
     }
   }
 

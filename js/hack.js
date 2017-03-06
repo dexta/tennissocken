@@ -36,7 +36,7 @@ $(document).ready(function() {
 
 	$("#left").click(function(){ playSwitch();});
 	$("#right").click(function(){ if(play) playSwitch();init();});
-	$("#middle").click(function(){ 
+	$("#topMiddle").click(function(){ 
 		//alert("main menu");
 		console.log("Main Menu");
 		playSwitch();
@@ -48,7 +48,7 @@ function screenSizeResize() {
 	var win = $(window)[0];
 	var w = win.innerWidth;
 	var h = win.innerHeight;
-	var eh = $("#header").height()+7;
+	var eh = $("#header").height()+$("#footer").height()+32;
 	//var canvas = canvasBuffer = document.getElementById('canvas');
 	canvas = $("#canvas")[0];
 	canvas.width = WIDTH = w;

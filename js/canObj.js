@@ -184,39 +184,9 @@ canBall = function(ctx,X,Y,W,H,dx,dy) {
     this.borderColor = bo;
   }
 
-
 };
 
 canBall.prototype = new canObj();
-
-temp = function() {
-  if (bDir.x > 0) {
-    if (pPos2.x <= ( bPos.x + bPos.w ) && pPos2.x > ( bPos.x - (bDir.x + bPos.w) ) 
-      ) {
-      var collisionDiff = bPos.x + (bPos.w - pPos2.x);
-      var k = collisionDiff/bDir.x;
-      var y = bDir.y*k + (bPos.y - bDir.y);
-      if (y >= pPos2.y && y + bPos.h <= pPos2.y + pPos2.h) {
-        // collides with right paddle
-        bPos.x = pPos2.x - bPos.w;
-        bPos.y = Math.floor( (bPos.y - bDir.y) + (bDir.y*k) );
-        bDir.x *= -1;
-      }
-    }
-    } else {
-      if (pPos1.x + pPos1.w >= bPos.x) {
-        var collisionDiff = (pPos1.x + pPos1.w) - bPos.x;
-        var k = collisionDiff/-bDir.x;
-        var y = bDir.y*k + (bPos.y - bDir.y);
-        if (y >= pPos1.y && y + bPos.h <= pPos1.y + pPos1.h) {
-          // collides with the left paddle
-          bPos.x = pPos1.x + pPos1.w;
-          bPos.y = Math.floor( (bPos.y - bDir.y) + (bDir.y*k) );
-          bDir.x *= -1;
-        }
-      }
-    }
-}
 
 function mergeObj(obj1,obj2) {
   var obj3 = {};
@@ -224,4 +194,3 @@ function mergeObj(obj1,obj2) {
   for(var o2 in obj2) { obj3[o2] = obj2[o2]; }
   return obj3;
 }
-

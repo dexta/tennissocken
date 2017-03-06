@@ -20,8 +20,6 @@ function initPlayerZerro() {
   ];
 }
 
-
-
 function initPlayerOne(playerConfig) {
   restField();
   howManyPlayer = 0;
@@ -90,7 +88,6 @@ function initPlayerTwo(playerConfig) {
 
 }
 
-
 function initPlayerThree(playerConfig) {
   restField();
   howManyPlayer = 3;
@@ -121,7 +118,6 @@ function initPlayerThree(playerConfig) {
   $("#playerThree").css("background-color",canObjs.player[2].rect.fillColor);
 
 }
-
 
 function initPlayerFour(playerConfig) {
   restField();
@@ -158,7 +154,6 @@ function initPlayerFour(playerConfig) {
 
 }
 
-
 function defaultConfig(name,update) {
   if(name==="xAxisPlayer") {
     var xap = {X:10,Y:(HEIGHT/2)-50,W:10,H:450,collSide:'left',color:'red',axis:"x",minMovePos:0,maxMovePos:2342};
@@ -167,4 +162,22 @@ function defaultConfig(name,update) {
     var yap = {X:(WIDTH/2)-50,Y:10,W:500,H:10,collSide:'top',color:'yellow',axis:"y",minMovePos:0,maxMovePos:2342};
     return mergeObj(yap,update);
   }
+}
+
+function testPlayfield(no) {
+  no = (no||false)? no : 0;
+  if(no===0) {
+    initPlayerZerro();
+  } else if(no===1) {
+    initPlayerOne([{color:'blue'}]);
+  } else if(no===2) {
+    initPlayerTwo([{color:'blue'},{color:'yellow'}]);
+  } else if(no===3) {
+    initPlayerThree([{color:'blue'},{color:'yellow'},{color:'green'}]);
+  } else if(no===4) {
+    initPlayerFour([{color:'blue'},{color:'yellow'},{color:'green'},{color:'red'}]);
+  } else {
+    console.log("no number here in testPlayfield "+no);
+  }
+  
 }

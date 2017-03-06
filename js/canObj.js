@@ -123,11 +123,10 @@ canPlayer = function(ctx,conf) {
 
       bFac[0] = (bFac[0]>=0)? bFac[0] : bFac[0]*-1;
 
-      var rFac = 1-(((bFac[0]*100)/bFac[1])/100);
-      // *(Math.random()+1)
+      var rFac = 2-(((bFac[0]*100)/bFac[1])/100);
       console.log("ball Factor "+rFac);
       // bO.dirx = (bO.dirx>=0)? rFac*12 : (rFac*12)*-1;
-      bO.diry = (bO.diry>=0)? rFac*18 : (rFac*8)*-1;
+      bO.diry = (bO.diry>=0)? rFac*6 : (rFac*6)*-1;
     }
   }
 

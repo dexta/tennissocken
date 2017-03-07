@@ -39,7 +39,7 @@ io.on('connection', function (socket) {
       console.dir(mydata);
       gamesRunning.serverID = socket.id;
       if(playerQueue.length>0) {
-        collectPlayer();
+        collectPlayer(socket);
       }
     });
 // make a player queue always then tell seek for server if they needed player
@@ -49,7 +49,7 @@ io.on('connection', function (socket) {
       newPlayer.socketID = socket.id;  
       playerQueue.push(newPlayer);
       socket.emit('welcomeInPlayerQueue',newPlayer);
-      collectPlayer();
+      collectPlayer(socket);
     });
 
     socket.on('joystick',function(doMove){
@@ -77,18 +77,19 @@ io.on('connection', function (socket) {
 
   });
 
-function collectPlayer() {
-  if(playerQueue.length>0) {
+function collectPlayer(socket) {
+  if(playerQueue.length>0 && (gamesRunning.serverID||false) ) {
     var playerNumber = gamesRunning.player.length;
-    var newPlayer = playerQueue.splice(0,1);
+    var newPlayer = playerQueue.splice(0,1)[0];
     console.log("new Client conected No.: "+playerNumber);
     newPlayer.color = playerColor[playerNumber];
     newPlayer.number = playerNumber;
+    console.dir(newPlayer);
     gamesRunning.player.push(newPlayer);
     sockets[newPlayer.socketID].emit('welcomePlayer',newPlayer);
-    var serSocket = sockets[gamesRunning.serverID];
-    serSocket.emit('newPlayer',newPlayer);
+    sockets[gamesRunning.serverID].emit('newPlayer',newPlayer);
     console.dir(gamesRunning);
+    collectPlayer(socket);
   }
 }
 

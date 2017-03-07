@@ -2,7 +2,7 @@ var KM = {player1UP:81,player1DOWN:65,player2UP:38,player2DOWN:40,player3UP:67,p
 
 var KM_P = [['player1UP','player1DOWN'],['player2UP','player2DOWN'],['player3UP','player3DOWN'],['player4UP','player4DOWN']];
 var howManyPlayer = 0;
-var playerConected = [];
+var playerConected = {canMap:[],count:0};
 
 var bPos = {x:50,y:50,w:10,h:10}; 
 var pPos1 = {x:10,y:200,w:10,h:100};

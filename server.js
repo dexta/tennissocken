@@ -49,6 +49,7 @@ io.on('connection', function (socket) {
       newPlayer.socketID = socket.id;  
       playerQueue.push(newPlayer);
       socket.emit('welcomeInPlayerQueue',newPlayer);
+      collectPlayer();
     });
 
     socket.on('joystick',function(doMove){
@@ -69,6 +70,11 @@ io.on('connection', function (socket) {
       delete sockets[socket.id];
     });
 
+
+    socket.on('playerSettingsFromServer',function(config){
+      sockets[config.socketID].emit('playerSettingsToClient',config);
+    });
+
   });
 
 function collectPlayer() {
@@ -79,7 +85,7 @@ function collectPlayer() {
     newPlayer.color = playerColor[playerNumber];
     newPlayer.number = playerNumber;
     gamesRunning.player.push(newPlayer);
-    socket.emit('welcomePlayer',newPlayer);
+    sockets[newPlayer.socketID].emit('welcomePlayer',newPlayer);
     var serSocket = sockets[gamesRunning.serverID];
     serSocket.emit('newPlayer',newPlayer);
     console.dir(gamesRunning);

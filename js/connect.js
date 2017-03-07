@@ -25,4 +25,9 @@ socket.on('doMove', function(data){
 
 socket.on('newPlayer',function(newPlayer){
   console.dir(newPlayer);
+  if(howManyPlayer>playerConected.length) {
+  	socket.emit('playerSettingsFromServer',canObjs.player[playerConected.length]);
+  	playerConected.push(newPlayer);
+  }
+
 });

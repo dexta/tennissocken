@@ -45,6 +45,7 @@
 		<script>
 			
 			var socket = io(window.location.origin);
+			var axisConfig = 'x';
 			console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
 			socket.on('connect',function(){
 				socket.emit('iamaclient',{});
@@ -54,6 +55,11 @@
 				document.body.style.background = playerData.color;
 				var svgURL = (playerData.number===1)? 'svg/PlayerOne.svg' : 'svg/PlayerTwo.svg';
 				document.getElementById('container').style.background = 'url('+svgURL+')';
+			});
+
+			socket.on('playerSettingsFromServer',function(settings){
+				console.dir(settings);
+				axisConfig = settings.axis;
 			});
 
 			var joyStart = false;
@@ -76,11 +82,24 @@
 				joyState('end');
 			})
 			setInterval(function(){
+				if(joyStart===false) return;
 				var outputEl	= document.getElementById('result');
-				if(joystick.up() && joyStart) {
+				var PUP = false;
+				var PDOWN = false;
+				if(axisConfig==='x' && joystick.up()) {
+					PUP = true;
+				} else if(axisConfig==='x' && joystick.down()) {
+					PDOWN = true;
+				} else if(axisConfig==='y' && joystick.left()) {
+					PUP = true;
+				} else if(axisConfig==='y' && joystick.right()) {
+					PDOWN = true;
+				}
+
+				if(PUP) {
 					socket.emit('joystick',{move:'up',state:'start'});
 					outputEl.innerHTML = 'send Up';
-				} else if (joystick.down() && joyStart) {
+				} else if (PDOWN) {
 					socket.emit('joystick',{move:'down',state:'start'});
 					outputEl.innerHTML = 'send Down';
 				}

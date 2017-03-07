@@ -2,12 +2,13 @@ var KM = {player1UP:81,player1DOWN:65,player2UP:38,player2DOWN:40,player3UP:67,p
 
 var KM_P = [['player1UP','player1DOWN'],['player2UP','player2DOWN'],['player3UP','player3DOWN'],['player4UP','player4DOWN']];
 var howManyPlayer = 0;
+var playerConected = [];
 
 var bPos = {x:50,y:50,w:10,h:10}; 
 var pPos1 = {x:10,y:200,w:10,h:100};
 var pPos2 = {x:110,y:200,w:10,h:200};
 var bDir = {x:-1,y:1};
-var punkte = {p1:0,p2:0};
+var punkte = {p1:0,p2:0,p3:0,p4:0};
 
 var canObjs = {
 	player: [],

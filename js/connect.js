@@ -6,7 +6,9 @@ socket.on('connect', function(id){
 });
 
 socket.on('doMove', function(data){
-	var playerKeys = KM_P[data.player.number-1];
+  if(!(data.player||false)) return;
+  console.dir(data);
+  var playerKeys = KM_P[data.player.number];
 	if(data.state==='end') {
 		keys[playerKeys[0]] = false;
 		keys[playerKeys[1]] = false;
@@ -19,7 +21,6 @@ socket.on('doMove', function(data){
 			keys[playerKeys[1]] = true;
 		}
 	}
-  console.dir(data);
 });
 
 socket.on('newPlayer',function(newPlayer){

@@ -53,6 +53,7 @@ io.on('connection', function (socket) {
     });
 
     socket.on('joystick',function(doMove){
+      if(!gamesRunning.serverID||false) return;
       var playerData;
       for(var g in gamesRunning.player) {
         if(gamesRunning.player[g].socketID===socket.id) {

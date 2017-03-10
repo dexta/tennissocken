@@ -46,20 +46,21 @@
 			
 			var socket = io(window.location.origin);
 			var axisConfig = 'x';
+			var lastXY = [false,false];
 			console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
 			socket.on('connect',function(){
 				socket.emit('iamaclient',{});
 			});
 			socket.on('welcomePlayer',function(playerData){
-				console.dir(playerData);
+				// console.dir(playerData);
 			});
 
-			socket.on('playerSettingsFromServer',function(settings){
+			socket.on('playerSettingsToClient',function(settings){
 				console.dir(settings);
 				axisConfig = settings.axis;
 				document.body.style.background = settings.color;
-				var svgURL = (settings.number===1)? 'svg/PlayerOne.svg' : 'svg/PlayerTwo.svg';
-				document.getElementById('container').style.background = 'url('+svgURL+')';
+				// var svgURL = (settings.number===1)? 'svg/PlayerOne.svg' : 'svg/PlayerTwo.svg';
+				// document.getElementById('container').style.background = 'url('+svgURL+')';
 			});
 
 			var joyStart = false;
@@ -95,7 +96,9 @@
 				} else if(axisConfig==='y' && joystick.right()) {
 					PDOWN = true;
 				}
-
+				if(lastXY[0]===PUP && lastXY[1]===PDOWN) return;
+				lastXY[0]=PUP;
+				lastXY[1]=PDOWN;
 				if(PUP) {
 					socket.emit('joystick',{move:'up',state:'start'});
 					outputEl.innerHTML = 'send Up';

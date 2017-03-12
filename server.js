@@ -20,6 +20,8 @@ var router = express();
 var server = http.createServer(router);
 var io = socketio.listen(server);
 
+var qr = require('qr-image');
+
 var util = require('util');
 
 router.use(express.static(path.resolve(__dirname, '')));
@@ -41,6 +43,7 @@ io.on('connection', function (socket) {
       if(playerQueue.length>0) {
         collectPlayer(socket);
       }
+      socket.emit('urlQRcode',generateQRcode("http://localhost:9423"));
     });
 // make a player queue always then tell seek for server if they needed player
     socket.on('iamaclient',function(mydata){
@@ -92,6 +95,11 @@ function collectPlayer(socket) {
     console.dir(gamesRunning);
     collectPlayer(socket);
   }
+}
+
+function generateQRcode(toCode) {
+  var img = qr.imageSync(toCode);
+  return img.toString('base64');
 }
 
 function broadcastComrade(gameId) {

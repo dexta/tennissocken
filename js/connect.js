@@ -44,3 +44,11 @@ socket.on('newPlayer',function(newPlayer){
   }
 
 });
+
+socket.on('urlQRcode',function(qrImage){
+  var bagrim = new canImg(ctx,(WIDTH/2)-(165/2),(HEIGHT/2)-(165/2),165,165,qrImage);
+  if(!canObjs.backgr||false) {
+    canObjs.backgr = [];
+  }
+  canObjs.backgr.push(bagrim);
+});

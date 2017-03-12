@@ -8,12 +8,13 @@ var bPos = {x:50,y:50,w:10,h:10};
 var pPos1 = {x:10,y:200,w:10,h:100};
 var pPos2 = {x:110,y:200,w:10,h:200};
 var bDir = {x:-1,y:1};
-var punkte = {p1:0,p2:0,p3:0,p4:0};
+var punkte = [0,0,0,0];
 
 var canObjs = {
 	player: [],
 	balls: [],
-	field: []
+	field: [],
+	backgr: []
 };
 
 function init() {
@@ -32,8 +33,8 @@ function draw() {
   	lastUpdate = now;
 	animationID = requestAnimationFrame(draw);
 	
-	bPos.x += bDir.x*6;
-	bPos.y += bDir.y*4;
+	// bPos.x += bDir.x*6;
+	// bPos.y += bDir.y*4;
 	for(var g in {field:'f',player:'p'}) {
 		var tmpObj = canObjs[g];
 		for(var f in tmpObj) {
@@ -47,6 +48,7 @@ function draw() {
 		var tB = canObjs.balls[b];
 		tB.move();
 		if(tB.X<0 || tB.X>WIDTH || tB.Y<0 || tB.Y>HEIGHT) {
+			scoreCount(tB);
 			tB.X=WIDTH/2;
 			tB.Y=HEIGHT/2;
 			tB.dirx*=-1;
@@ -61,6 +63,10 @@ function draw() {
 	}
 	
 	clearCTX();
+
+	for(var g in canObjs.backgr) {
+		canObjs.backgr[g].draw();	
+	}
 	
 	for(var b in canObjs.balls) {
 		canObjs.balls[b].draw();	
@@ -76,6 +82,43 @@ function draw() {
 
 	var iFPS = parseInt(fps);
 	$("#topMiddle").html(""+iFPS);
-	$("#punkte1").html(punkte.p1);
-	$("#punkte2").html(punkte.p2);
+
+}
+
+
+function scoreCount(ballObj) {
+	// var playerNumber = canObjs.player.indexOf(ballObj);
+	var playerNumber = -1;
+	for(var p in canObjs.player) {
+		if(canObjs.player[p].rect.fillColor===ballObj.fillColor) {
+			playerNumber = p;
+			break;
+		}
+	}
+	if(playerNumber===-1) return;
+	punkte[playerNumber]++;
+	if(punkte[playerNumber]>=2) { console.log("Player "+playerNumber+" wins !!1!!"); doSomeWinning(playerNumber);}
+	var divMap = ['One','Two','Three','Four'];
+	var divPunkte = "#player"+divMap[playerNumber];
+	$(divPunkte).html(divPunkte+": "+punkte[playerNumber]);
+}
+
+
+function doSomeWinning(playerNumber) {
+	var cpOb = canObjs.player[playerNumber];
+	cpOb.muteDraw = true;
+	var nX = (cpOb.axis==='y')? cpOb.X : 0;
+	var nY = (cpOb.axis==='x')? cpOb.Y : 0;
+	var nHeight = (cpOb.axis==='y')? cpOb.H : HEIGHT;
+	var nWidth = (cpOb.axis==='x')? cpOb.W : WIDTH;
+	var closePlayer = new canRect(
+			cpOb.rect.C,
+			cpOb.rect.X,
+			cpOb.rect.Y,
+			nHeight,
+			nWidth,
+			cpOb.collSide
+		);
+	// new canRect(ctx,0,HEIGHT-10,oneThird,10,'top'),
+	canObjs.field.push(closePlayer);
 }

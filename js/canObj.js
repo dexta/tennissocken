@@ -89,15 +89,18 @@ canPlayer = function(ctx,conf) {
   for(var c in conf) {
     this[c] = conf[c];
   }
+  this.muteDraw = false;
   this.rect = new canRect(ctx,this.X,this.Y,this.W,this.H,this.collSide);
   var colorZ = {red:'rgba(255,0,0,1)',blue:'rgba(0,0,255,1)',green:'rgba(0,255,0,1)',yellow:'rgba(255,255,0,1)'};
   this.rect.fillColor = colorZ[this.color];
   this.rect.borderColor = colorZ[this.color];
   this.draw = function() {
+    if(this.muteDraw) return;
     this.rect.draw();
   }
 
   this.collision = function(bO) {
+    if(this.muteDraw) return;
     var hit = this.rect.collision(bO);
     if(hit) {
       bO.setColor(this.rect.fillColor,this.rect.borderColor);
@@ -171,6 +174,36 @@ canBall = function(ctx,X,Y,W,H,dx,dy) {
 };
 
 canBall.prototype = new canObj();
+
+
+canImg = function(ctx,X,Y,W,H,imgBase) {
+  var that = this;
+  this.constructor(ctx,X,Y);
+  this.X = X;
+  this.Y = Y;
+  this.width = W;
+  this.height = H;
+  this.img = new Image();
+  this.imgIsLoaded = false;
+  this.img.onload = function() {that.imgIsLoaded=true;};
+
+  this.loadImage = function(base64) {
+    if(!base64||false) return;
+    this.img.src = 'data:image/jpeg;base64,'+base64;
+  };
+
+  this.loadImage(imgBase);
+
+  this.draw = function() {
+    if(!this.imgIsLoaded) return;
+    this.C.drawImage(this.img,this.X,this.Y);
+  };
+
+};
+
+canImg.prototype = new canObj();
+
+
 
 function mergeObj(obj1,obj2) {
   var obj3 = {};

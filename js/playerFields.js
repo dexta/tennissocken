@@ -1,8 +1,21 @@
+var muteWalls = [];
+
 function restField() {
   canObjs = {
     player: [],
     balls: [],
     field: []
+  };
+  muteWalls = { 
+    // the mass must have a end
+    // from now we using a physic engine as external lib
+    // this one is over the way broken in multi way
+    // no overlay object - fly throw object - stuck in corner etc.
+    // start seeking commit
+    top: new canRect(ctx,0,0,WIDTH,10,'bottom'),
+    right: new canRect(ctx,WIDTH-10,0,10,HEIGHT,'left'),
+    bottom: new canRect(ctx,0,HEIGHT-10,WIDTH,10,'top'),
+    left: new canRect(ctx,0,0,10,HEIGHT,'right')
   };
 }
 
@@ -16,7 +29,7 @@ function initPlayerZerro() {
   ];
 
   canObjs.balls = [
-    new canBall(ctx,(WIDTH/2),(HEIGHT/2),10,10,-6,-4)
+    new canBall(ctx,(WIDTH/2),(HEIGHT/2),10,10,-14,-8)
   ];
 }
 
@@ -136,10 +149,14 @@ function initPlayerFour(playerConfig) {
     new canBall(ctx,(WIDTH/2),(HEIGHT/2),10,10,6,4)
   ];
 
-  var cusUpd = {Y:50,X:300,collSide:'right',color:playerConfig[0].color,minMovePos:10,maxMovePos:HEIGHT-10};
-  var cusUpd1 = {Y:50,X:(WIDTH-300),collSide:'left',color:playerConfig[1].color,minMovePos:10,maxMovePos:HEIGHT-10};
-  var cusUpd2 = {X:oneThird+50,Y:10,collSide:'bottom',color:playerConfig[2].color,minMovePos:oneThird,maxMovePos:WIDTH-oneThird};
-  var cusUpd3 = {X:oneThird+50,Y:HEIGHT-10,collSide:'top',color:playerConfig[3].color,minMovePos:oneThird,maxMovePos:WIDTH-oneThird};
+  var cusUpd = {  Y:50,X:300,collSide:'right',color:playerConfig[0].color,
+                  minMovePos:10,maxMovePos:HEIGHT-10,muteWall:muteWalls['left']  };
+  var cusUpd1 = { Y:50,X:(WIDTH-300),collSide:'left',color:playerConfig[1].color,
+                  minMovePos:10,maxMovePos:HEIGHT-10,muteWall:muteWalls['right']  };
+  var cusUpd2 = { X:oneThird+50,Y:10,collSide:'bottom',color:playerConfig[2].color,
+                  minMovePos:oneThird,maxMovePos:WIDTH-oneThird,muteWall:muteWalls['top']   };
+  var cusUpd3 = { X:oneThird+50,Y:HEIGHT-10,collSide:'top',color:playerConfig[3].color,
+                  minMovePos:oneThird,maxMovePos:WIDTH-oneThird,muteWall:muteWalls['bottom']   };
 
   canObjs.player = [
     new canPlayer(ctx,defaultConfig('xAxisPlayer',cusUpd)),

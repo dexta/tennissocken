@@ -21,6 +21,7 @@ function init() {
 	console.log("We are ready!");
 	
 	initPlayerFour([{color:'blue'},{color:'yellow'},{color:'green'},{color:'red'}]);
+	// initPlayerZerro();
 		
 	playSwitch();
 	
@@ -107,18 +108,5 @@ function scoreCount(ballObj) {
 function doSomeWinning(playerNumber) {
 	var cpOb = canObjs.player[playerNumber];
 	cpOb.muteDraw = true;
-	var nX = (cpOb.axis==='y')? cpOb.X : 0;
-	var nY = (cpOb.axis==='x')? cpOb.Y : 0;
-	var nHeight = (cpOb.axis==='y')? cpOb.H : HEIGHT;
-	var nWidth = (cpOb.axis==='x')? cpOb.W : WIDTH;
-	var closePlayer = new canRect(
-			cpOb.rect.C,
-			cpOb.rect.X,
-			cpOb.rect.Y,
-			nHeight,
-			nWidth,
-			cpOb.collSide
-		);
-	// new canRect(ctx,0,HEIGHT-10,oneThird,10,'top'),
-	canObjs.field.push(closePlayer);
+	canObjs.field.push(cpOb.muteWall);
 }

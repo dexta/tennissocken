@@ -45,16 +45,18 @@ $(document).ready(function() {
 	});
 	
 function screenSizeResize() {
+	// do update soon to config this funktion
 	var win = $(window)[0];
 	var w = win.innerWidth;
 	var h = win.innerHeight;
 	var eh = $("#header").height()+$("#footer").height()+32;
+	var ew = $("#sidebar").width()+8;
 	//var canvas = canvasBuffer = document.getElementById('canvas');
 	canvas = $("#canvas")[0];
-	canvas.width = WIDTH = w;
-	canvas.height = HEIGHT = h-eh;
+	canvas.width = WIDTH = w-ew;
+	canvas.height = HEIGHT = h-16;
 	ctx =  canvas.getContext('2d');
-	console.log("Canvas resize to "+w+"x"+(h-eh));
+	console.log("Canvas resize to "+WIDTH+"x"+HEIGHT);
 }
 
 // **handle key press events **

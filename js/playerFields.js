@@ -148,15 +148,21 @@ function initPlayerFour(playerConfig) {
     new canBall(ctx,(WIDTH/2),(HEIGHT/2),10,10,-6,-4),
     new canBall(ctx,(WIDTH/2),(HEIGHT/2),10,10,6,4)
   ];
-
+  var mute1 = new canRect(ctx,11,0,10,HEIGHT-22,'right');
   var cusUpd = {  Y:50,X:300,collSide:'right',color:playerConfig[0].color,
-                  minMovePos:10,maxMovePos:HEIGHT-10,muteWall:muteWalls['left']  };
+                  minMovePos:10,maxMovePos:HEIGHT-10,muteWall:mute1  };
+
+  var mute2 = new canRect(ctx,11,WIDTH-10,10,HEIGHT-22,'left'); 
   var cusUpd1 = { Y:50,X:(WIDTH-300),collSide:'left',color:playerConfig[1].color,
-                  minMovePos:10,maxMovePos:HEIGHT-10,muteWall:muteWalls['right']  };
-  var cusUpd2 = { X:oneThird+50,Y:10,collSide:'bottom',color:playerConfig[2].color,
-                  minMovePos:oneThird,maxMovePos:WIDTH-oneThird,muteWall:muteWalls['top']   };
+                  minMovePos:10,maxMovePos:HEIGHT-10,muteWall:mute2  };
+
+  var mute3 = new canRect(ctx,oneThird+4,0,oneThird,10,'bottom');
+  var cusUpd2 = { X:oneThird+50,Y:0,collSide:'bottom',color:playerConfig[2].color,
+                  minMovePos:oneThird,maxMovePos:WIDTH-oneThird,muteWall:mute3   };
+
+  var mute4 = new canRect(ctx,oneThird+4,HEIGHT-10,WIDTH-oneThird-5,10,'top');          
   var cusUpd3 = { X:oneThird+50,Y:HEIGHT-10,collSide:'top',color:playerConfig[3].color,
-                  minMovePos:oneThird,maxMovePos:WIDTH-oneThird,muteWall:muteWalls['bottom']   };
+                  minMovePos:oneThird,maxMovePos:WIDTH-oneThird,muteWall:mute4   };
 
   canObjs.player = [
     new canPlayer(ctx,defaultConfig('xAxisPlayer',cusUpd)),

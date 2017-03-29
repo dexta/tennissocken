@@ -1,0 +1,25 @@
+{
+  "name": "tennissocken",
+  "version": "0.1.1",
+  "description": "tennis 4 two with socket.io remote joystick",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dexta/jscanvasgame.git"
+  },
+  "author": "dexta.de",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/dexta/jscanvasgame/issues"
+  },
+  "homepage": "https://github.com/dexta/jscanvasgame#readme",
+  "dependencies": {
+    "async": "^2.1.5",
+    "express": "^4.14.1",
+    "qr-image": "^3.2.0",
+    "socket.io": "^1.7.3"
+  }
+}

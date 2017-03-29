@@ -4,7 +4,6 @@
 // A simple game server using Socket.IO, Express, and Async.
 //
 
-
 var http = require('http');
 var path = require('path');
 
@@ -28,71 +27,91 @@ router.use(express.static(path.resolve(__dirname, '')));
 
 var sockets = {};
 
+console.log("Server URL: "+config.serverURL);
+
 var clientsConnected = {};
-var gamesRunning = {player:[]};
+var gamesRunning = {player:[],serverId:0};
 var playerQueue = [];
-var playerColor = ['red','blue','green','yellow'];
+// var playerColor = ['red','blue','green','yellow'];
+
+router.get('/get_qrcode', function(req,res) {
+  var img = qr.imageSync(config.serverURL,{size: 15}); 
+  res.writeHead(200, {'Content-Type': 'image/png'});
+  res.end(img, 'binary');  
+});
+router.get('/server_url',function(req,res) {
+  res.send(config.serverURL);
+});
 
 io.on('connection', function (socket) {
     sockets[socket.id] = socket;
     socket.emit('connect',socket.id);
 
     socket.on('iamaserver',function(mydata) {
+      console.log("New Server Started - id: "+socket.id);
       console.dir(mydata);
-      gamesRunning.serverID = socket.id;
-      if(playerQueue.length>0) {
-        collectPlayer(socket);
-      }
-      socket.emit('urlQRcode',generateQRcode("http://localhost:9423"));
+      gamesRunning.serverId = socket.id;
+      collectPlayer(socket);
     });
-// make a player queue always then tell seek for server if they needed player
+
     socket.on('iamaclient',function(mydata){
-      console.log("new Client in Queue");
-      var newPlayer = {};
-      newPlayer.socketID = socket.id;  
-      playerQueue.push(newPlayer);
-      socket.emit('welcomeInPlayerQueue',newPlayer);
+      console.log("new Player - id: "+socket.id);
+      playerQueue.push(socket.id);
+      console.log("player in Queue "+playerQueue.length);
       collectPlayer(socket);
     });
 
     socket.on('joystick',function(doMove){
-      if(!gamesRunning.serverID||false) return;
+      if(!gamesRunning.serverId||false) return;
       var playerData;
+      // console.log('move data '+socket.id);
+      // console.dir(doMove);
       for(var g in gamesRunning.player) {
-        if(gamesRunning.player[g].socketID===socket.id) {
+        if(gamesRunning.player[g].socketId===socket.id) {
           playerData = gamesRunning.player[g];
         }
       }
       doMove.player = playerData;
-      sockets[gamesRunning.serverID].emit('doMove',doMove);
+      sockets[gamesRunning.serverId].emit('doMove',doMove);
     });
 
-
     socket.on('disconnect', function () {
-      gamesRunning.player.splice(gamesRunning.player.indexOf(socket.id),1);
-      console.log("peer disconnect "+(new Date())+" - "+socket.id);
+      if(playerQueue.indexOf(socket.id)!=-1) {
+        playerQueue.splice(playerQueue.indexOf(socket.id),1);
+        console.log("kick player in Queue");
+        console.dir(playerQueue);
+      }
+      for(var d in gamesRunning.player) {
+        if(gamesRunning.player[d].socketId===socket.id) {
+          gamesRunning.player.splice(d,1);
+          console.log("delete player in gamesRunning ");
+          console.dir(gamesRunning.player);
+          break;
+        }
+      }
+      if(gamesRunning.socketId!=0&&gamesRunning.socketId!=socket.id) {
+        sockets[gamesRunning.serverId].emit("playerGone",socket.id);
+      }
+
       delete sockets[socket.id];
     });
 
-
     socket.on('playerSettingsFromServer',function(config){
-      sockets[config.socketID].emit('playerSettingsToClient',config);
+      console.dir(config);
+      sockets[config.socketId].emit('playerSettingsToClient',config);
     });
 
   });
 
 function collectPlayer(socket) {
-  if(playerQueue.length>0 && (gamesRunning.serverID||false) ) {
-    var playerNumber = gamesRunning.player.length;
-    var newPlayer = playerQueue.splice(0,1)[0];
-    console.log("new Client conected No.: "+playerNumber);
-    newPlayer.color = playerColor[playerNumber];
-    newPlayer.number = playerNumber;
-    console.dir(newPlayer);
+  if(playerQueue.length>0 && (gamesRunning.serverId||false) ) {
+    var newPlayer = {socketId:0};
+    newPlayer.socketId = playerQueue.splice(0,1)[0];
+    console.log("new Client conected ! "+newPlayer.socketId);
     gamesRunning.player.push(newPlayer);
-    sockets[newPlayer.socketID].emit('welcomePlayer',newPlayer);
-    sockets[gamesRunning.serverID].emit('newPlayer',newPlayer);
-    console.dir(gamesRunning);
+    sockets[gamesRunning.serverId].emit('newPlayer',newPlayer);
+    socket.emit('welcomePlayer',newPlayer);
+    // console.dir(gamesRunning);
     collectPlayer(socket);
   }
 }
@@ -100,27 +119,6 @@ function collectPlayer(socket) {
 function generateQRcode(toCode) {
   var img = qr.imageSync(toCode);
   return img.toString('base64');
-}
-
-function broadcastComrade(gameId) {
-  if(!(gamesRunning[gameId]||false)) return;
-  var gR = gamesRunning[gameId];
-  var gameData = {
-    search: gR.search,
-    called: gR.called,
-    timer: gR.timer,
-    nameList: gR.nameList,
-    player: gR.nameList[gR.plpos].name,
-    WON: gR.playerWon
-  };
-  for(var c in gR.player) {
-    var soID = gR.player[c].socketID;
-    if(sockets[soID]||false) {
-      console.log("sendGameData ID "+soID);
-      sockets[soID].emit('getGameData',gameData);
-    }
-  }
-  sockets[gR.ownerId].emit('getGameData',gameData);
 }
 
 function broadcast(event, data) {

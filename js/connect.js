@@ -1,54 +1,78 @@
 var socket = io(window.location.origin);
 
+var howManyPlayer = 4;
+var playerConected = 0;
+var playerKeys = []
 socket.on('connect', function(id){
   console.log(id);
-  socket.emit('iamaserver',{player:[],uui:423});
+  setTimeout(function() {
+    socket.emit('iamaserver',{randomString:"3//dice profed"});  
+  },500);
+  
 });
 
-socket.on('doMove', function(data){
-  if(!(data.player||false)) return;
-  // console.dir(data);
-  var playerKeys = KM_P[data.player.number];
-	if(data.state==='end') {
-		keys[playerKeys[0]] = false;
-		keys[playerKeys[1]] = false;
-	} else if(data.state==='start') {
-		if(data.move==='up') {
-			keys[playerKeys[0]] = true;
-			keys[playerKeys[1]] = false;
-      playerConected[data.player.socketID].move(5);
-		} else if(data.move==='down') {
-			keys[playerKeys[0]] = false;
-			keys[playerKeys[1]] = true;
-      playerConected[data.player.socketID].move(-5);
-		}
-	}
+function findBySocket(socketId) {
+  for(var p=1;p<=4;p++) {
+    if(socketId===player[p].socketId) {
+      return player[p];
+    }
+  }
+  return false;
+}
+function findNextPlayer() {
+  return findBySocket(0);
+}
 
+socket.on('doMove', function(data){
+  // console.dir(data);
+  if(!(data.player||false)) return;
+  var pl = findBySocket(data.player.socketId||false);
+  if(!pl) return;
+  if(data.move==='up') {
+    pl.velocity = 8;  
+  } else if(data.move==='down') {
+    pl.velocity = -8;
+  } else if(data.state==='end') {
+    pl.velocity = 0;
+  }
+});
+
+socket.on('playerGone',function(hisSocketId) {
+  var gonePlayer = findBySocket(hisSocketId);
+  console.dir(gonePlayer);
+  gonePlayer.socketId = 0;
+  console.log("player disconected - id: "+hisSocketId);
+  playerConected--;
 });
 
 socket.on('newPlayer',function(newPlayer){
-  // console.dir(newPlayer);
-  // console.dir(playerConected);
+  if(howManyPlayer>playerConected) {
 
-  if(howManyPlayer>playerConected.count) {
-  	var localPlayer = canObjs.player[playerConected.count];
-    var con = {};
+   var localPlayer = findNextPlayer();
+   if(!localPlayer) {
+      console.log("to many player");
+      return;
+   }
 
-    con.socketID = newPlayer.socketID;
-    con.color = localPlayer.rect.fillColor;
-    con.axis = localPlayer.axis;
-    console.log(con);
-    playerConected[newPlayer.socketID] = localPlayer;
-    socket.emit('playerSettingsFromServer',con);
-  	playerConected.count++;
+   playerConected++;
+
+   localPlayer.socketId = newPlayer.socketId;
+   newPlayer.playerNo = localPlayer.playerNo;
+   newPlayer.axis = localPlayer.orient;
+   var bg_maPimg = {
+    1:"url('img/BG_Gelb.png')",
+    2:"url('img/BG_Blau.png')",
+    3:"url('img/BG_Pink.png')",
+    4:"url('img/BG_Gruen.png')"
+   };
+   newPlayer.color = bg_maPimg[localPlayer.sprite.frame+1+""];
+    console.log("new Player");
+    console.dir(newPlayer);
+    socket.emit('playerSettingsFromServer',newPlayer);
   }
 
 });
 
 socket.on('urlQRcode',function(qrImage){
-  var bagrim = new canImg(ctx,(WIDTH/2)-(165/2),(HEIGHT/2)-(165/2),165,165,qrImage);
-  if(!canObjs.backgr||false) {
-    canObjs.backgr = [];
-  }
-  canObjs.backgr.push(bagrim);
+  document.getElementById('player1Score').style.backgroundImage = qrImage;
 });

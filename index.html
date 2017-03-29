@@ -36,7 +36,7 @@
 		</style>
 	</head>
 	<body>
-		<div id="container" style="background: url(svg/PlayerOne.svg);"></div>
+		<!-- <div id="container" style="background: url(svg/PlayerOne.svg);"></div> -->
 		<div id="info">
 			<span id="result"></span>
 		</div> 
@@ -52,10 +52,12 @@
 				socket.emit('iamaclient',{});
 			});
 			socket.on('welcomePlayer',function(playerData){
-				// console.dir(playerData);
+				console.log('welcome Player - id: '+playerData.socketId);
+				console.dir(playerData);
 			});
 
 			socket.on('playerSettingsToClient',function(settings){
+				console.log('server send settings: ');
 				console.dir(settings);
 				axisConfig = settings.axis;
 				document.body.style.background = settings.color;
@@ -87,14 +89,14 @@
 				var outputEl	= document.getElementById('result');
 				var PUP = false;
 				var PDOWN = false;
-				if(axisConfig==='x' && joystick.up()) {
-					PUP = true;
-				} else if(axisConfig==='x' && joystick.down()) {
+				if(axisConfig==='y' && joystick.up()) {
 					PDOWN = true;
-				} else if(axisConfig==='y' && joystick.left()) {
+				} else if(axisConfig==='y' && joystick.down()) {
 					PUP = true;
-				} else if(axisConfig==='y' && joystick.right()) {
+				} else if(axisConfig==='x' && joystick.left()) {
 					PDOWN = true;
+				} else if(axisConfig==='x' && joystick.right()) {
+					PUP = true;
 				}
 				if(lastXY[0]===PUP && lastXY[1]===PDOWN) return;
 				lastXY[0]=PUP;

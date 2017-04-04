@@ -4,9 +4,6 @@ var game = new Phaser.Game(800, 608, Phaser.CANVAS, 'puckDiv', { preload: preloa
 function preload() {
   game.stage.disableVisibilityChange = true;
 
-  game.load.image('ballImg', 'img/ball.png');
-  game.load.image('gameTiles', 'img/Pong_First.png');
-
   game.load.spritesheet('bricks', 'img/Bricks_32x32.png',32,32);
   game.load.spritesheet('balls','img/Ball_32x32.png',32,32);
   game.load.spritesheet('padelx','img/Padel_128x32.png',128,32);

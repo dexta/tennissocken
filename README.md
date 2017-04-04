@@ -33,6 +33,6 @@ Run
 ```bash
 node server.js
 ```
-Playfield http://localhost:9423/puck.html
+Playfield http://localhost:9423/playfield/
 
-Player http://localhost:9423/
+Player http://localhost:9423/controls/

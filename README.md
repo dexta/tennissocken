@@ -1,7 +1,7 @@
 Tennissocken for four
 =====================
 
-is a four player pong clone in [phaser.io](http://phaser.io) with [socket.io](https://github.com/socketio/socket.io) (node express backend)
+is a four player pong like game in [phaser.io](http://phaser.io) with [socket.io](https://github.com/socketio/socket.io) (node express backend)
 
 Clone
 =====

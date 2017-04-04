@@ -2,72 +2,55 @@
 <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-    <title>Phaser Examples</title>
-    <script src="js/phaser.min.js"></script>
+    <title>Puck Game View</title>
+    <link rel="stylesheet" type="text/css" href="css/puck.css">
+    <script src="js/phaser.js"></script>
     <script src="js/puck.js"></script>
     <script src="js/level.js"></script>
     <script src="socket.io/socket.io.js"></script>
     <script src="js/connect.js"></script>
-    <style type="text/css">
-      body {
-        background: black;
-      }
-      #main {
-        position: absolute;
-        background-color: black;
-        top: 0px
-        left: 0px;
-      }
-      #score {
-        background-color: black;
-        border: 16px solid #00F;
-        width: 253px;
-        height: 576px;
-        float: left;
-      }
-      .playerScore {       
-        width: 252px;
-        height: 120px;
-        border: 1px solid white;
-        font-size: 42px;
-        color: white;
-        text-align: center;
-        padding-top: 23px;
-      }
-      .playerPink {
-        background: url('img/BG_Pink.png');
-      }
-      .playerBlau {
-        background: url('img/BG_Blau.png');
-      }
-      .playerGruen {
-        background: url('img/BG_Gruen.png');
-      }
-      .playerGelb {
-        background: url('img/BG_Gelb.png');
-      }
-      #puckDiv {
-        width: 800px;
-        height: 608px;
-        float: left;
-      }
-      #qrImage {
-        float: left;
-      }
-    </style>
+    <script src="js/animation.js"></script>
   </head>
   <body>
     <div id="main">
       <div id="score">
-        <div class="playerScore playerGelb" id="player1Score">test</div>
-        <div class="playerScore playerBlau" id="player2Score"></div>
-        <div class="playerScore playerPink" id="player3Score"></div>
-        <div class="playerScore playerGruen" id="player4Score"></div>
+        <div class="playerScore playerGelb" id="player1Score">0</div>
+        <div class="playerScore playerBlau" id="player2Score">0</div>
+        <div class="playerScore playerPink" id="player3Score">0</div>
+        <div class="playerScore playerGruen" id="player4Score">0</div>
       </div>
       <div id="puckDiv"></div>
       <div id="qrImage">
         <img src="get_qrcode">
+        <!-- <h1 onclick="game.paused=!game.paused;" style="color:white;cursor:pointer;">Start/Stop</h1> -->
+      </div>
+      <div style="color:white;cursor:pointer;">
+        <div class="buttonBox" onclick="game.paused=!game.paused;">
+          Start<br/> Stop
+        </div>
+        <div class="buttonBox" onclick="cAnim.toggleCube();">
+          Toggle Cube
+        </div>
+        <div class="buttonBox">
+          <span onclick="cAnim.rotateTo(1);"> 1 </span>
+          <span onclick="cAnim.rotateTo(2);"> 2 </span>
+          <span onclick="cAnim.rotateTo(3);"> 3 </span><br/>
+          <span onclick="cAnim.rotateTo(4);"> 4 </span>
+          <span onclick="cAnim.rotateTo(5);"> 5 </span>
+          <span onclick="cAnim.rotateTo(6);"> 6 </span>
+          <span onclick="cAnim.testAnim();"> A </span>
+        </div>
       </div>
     </div>
+    <section id="overlay" class="hidden container">
+      <div id="cube" class="show-front">
+        <figure class="front"><br>6</figure>
+        <figure class="back"><br>1</figure>
+        <figure class="right"><img src="img/Cube_Sideart.png"></figure>
+        <figure class="left"><img src="img/Cube_Sideart.png"></figure>
+        <figure class="top"><br>2</figure>
+        <figure class="bottom"><br>3</figure>
+      </div>
+    </section>
   </body>
 </html>

@@ -43,6 +43,8 @@ socket.on('playerGone',function(hisSocketId) {
   gonePlayer.socketId = 0;
   console.log("player disconected - id: "+hisSocketId);
   playerConected--;
+  gonePlayer.animRun = true;
+  gonePlayer.animType = false;
 });
 
 socket.on('newPlayer',function(newPlayer){
@@ -53,7 +55,11 @@ socket.on('newPlayer',function(newPlayer){
       console.log("to many player");
       return;
    }
-
+   localPlayer.sprite.visible = true;
+   localPlayer.connected = true;
+   localPlayer.animRun = true;
+   localPlayer.animType = true;
+   // player[newPlayer.playerNo].blockWall = playerBricks[newPlayer.playerNo];
    playerConected++;
 
    localPlayer.socketId = newPlayer.socketId;
@@ -70,7 +76,7 @@ socket.on('newPlayer',function(newPlayer){
     console.dir(newPlayer);
     socket.emit('playerSettingsFromServer',newPlayer);
   }
-
+  if(playerConected>=4) game.paused = false;
 });
 
 socket.on('urlQRcode',function(qrImage){

@@ -89,8 +89,10 @@ io.on('connection', function (socket) {
           break;
         }
       }
-      if(gamesRunning.socketId!=0&&gamesRunning.socketId!=socket.id) {
+      if(gamesRunning.socketId!=0&&gamesRunning.socketId!=socket.id&&(sockets[gamesRunning.serverId]||false)) {
         sockets[gamesRunning.serverId].emit("playerGone",socket.id);
+      } else if(gamesRunning.socketId===socket.id) {
+        resetServer(socket);
       }
 
       delete sockets[socket.id];
@@ -104,7 +106,7 @@ io.on('connection', function (socket) {
   });
 
 function collectPlayer(socket) {
-  if(playerQueue.length>0 && (gamesRunning.serverId||false) ) {
+  if(playerQueue.length>0 && (gamesRunning.serverId||false) && (sockets[gamesRunning.serverId]||false) ) {
     var newPlayer = {socketId:0};
     newPlayer.socketId = playerQueue.splice(0,1)[0];
     console.log("new Client conected ! "+newPlayer.socketId);
@@ -113,6 +115,16 @@ function collectPlayer(socket) {
     socket.emit('welcomePlayer',newPlayer);
     // console.dir(gamesRunning);
     collectPlayer(socket);
+  }
+}
+
+function resetServer(socket) {
+  for(var p in gamesRunning.player) {
+    var id = gamesRunning.player[p].socketId;
+    if(sockets[id]||false) {
+      sockets[id].emit("serverGone");
+    }
+
   }
 }
 

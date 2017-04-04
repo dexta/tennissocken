@@ -65,6 +65,11 @@
 				// document.getElementById('container').style.background = 'url('+svgURL+')';
 			});
 
+			socket.on('serverGone',function(){
+				console.log("server is gone");
+				socket.emit('iamaclient',{});
+			});
+
 			var joyStart = false;
 			var joystick	= new VirtualJoystick({
 				container	: document.getElementById('container'),
@@ -103,10 +108,10 @@
 				lastXY[1]=PDOWN;
 				if(PUP) {
 					socket.emit('joystick',{move:'up',state:'start'});
-					outputEl.innerHTML = 'send Up';
+					outputEl.innerHTML = 'send Down';
 				} else if (PDOWN) {
 					socket.emit('joystick',{move:'down',state:'start'});
-					outputEl.innerHTML = 'send Down';
+					outputEl.innerHTML = 'send Up';
 				}
 			}, 1/30 * 1000);
 

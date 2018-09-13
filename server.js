@@ -140,6 +140,5 @@ function broadcast(event, data) {
 }
 
 server.listen(config.server.port || 9423, config.server.ip || "0.0.0.0", function(){
-  var serverInfo = server.address();
-  console.log("Chat server listening at", serverInfo.address + ":" + serverInfo.port);
+  console.log("Chat server listening at", config.server.ip + ":" + config.server.port);
 });
